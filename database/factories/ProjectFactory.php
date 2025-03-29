@@ -21,9 +21,9 @@ class ProjectFactory extends Factory
             'description' => $this->faker->paragraph(),
             'due_date' => $this->faker->dateTimeBetween('now', '+1 year'),
             'status' => $this->faker->randomElement(['pending', 'in_progress', 'completed']),
-            'image_path' => $this->faker->imageUrl(),
+            'image_path' => "https://picsum.photos/800/600?random={$this->faker->numberBetween(1, 100)}",
             'created_by' => 1,
-            'updated_id' => 1,
+            'updated_by' => 1,
         ];
     }
 }

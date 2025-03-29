@@ -23,7 +23,7 @@ class TaskFactory extends Factory
             'status' => $this->faker->randomElement(['pending', 'in_progress', 'completed']),
             'priority' => $this->faker->randomElement(['low', 'medium', 'high']),
             'assigned_user_id' => 1,
-            'image_path' => $this->faker->imageUrl(),
+            'image_path' => "https://picsum.photos/800/600?random={$this->faker->numberBetween(1, 100)}",
             'created_by' => 1,
             'updated_id' => 1,
         ];

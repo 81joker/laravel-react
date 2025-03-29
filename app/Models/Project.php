@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Project extends Model
 {
@@ -16,6 +17,9 @@ class Project extends Model
         'start_date',
         'end_date',
         'status',
+        'image_path',
+        'created_by',
+        'updated_by',
     ];
     protected $casts = [
         'start_date' => 'datetime',
@@ -28,10 +32,14 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
-//     public function users()
-//     {
-//         return $this->belongsToMany(User::class);
-//     }
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class ,'created_by');
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class ,'updated_by');
+    }
 //     public function scopeActive($query)
 //     {
 //         return $query->where('status', 'active');
