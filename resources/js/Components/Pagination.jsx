@@ -3,8 +3,15 @@ export default function Pagination ({ links }) {
     return (
         <nav className="text-center mt-4">
     {links.map(link => (
-        <Link key={link.label} href={link.url} className={link.active ? 'font-bold text-blue-500' : ''}>
-            {link.label}
+        <Link 
+        key={link.label}
+        href={link.url || ""}
+        method={link.method}
+        preserveScroll
+        className={"py-2 px-3 inline-block text-gray-200 rounded-lg text-xs "  + (link.active ? "bg-gray-950 text-white " : "") + (!link.url ? "!text-gray-500 coursor-not-allowed" : "hover:bg-gray-950")}
+        dangerouslySetInnerHTML={{__html: link.label}}
+        >
+          
         </Link>
     ))}
         </nav>
