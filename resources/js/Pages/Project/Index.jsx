@@ -23,6 +23,29 @@ export default function Project({ projects , queryParams = null}) {
             searchFieldChanged(name, value);
           }
 
+          // const sortChanged = (name) => {
+          //   if (queryParams.sort === name) {
+          //     queryParams.sort = '-' + name;
+          //   } else {
+          //     queryParams.sort = name;
+          //   }
+          //   router.get(route('project.index'), queryParams);
+          // }
+
+          const sortChanged = (name) => {
+            if(name === queryParams.sort_field){
+              if(queryParams.sort_diraction === 'asc'){
+                queryParams.sort_diraction = 'desc';
+              }else{
+                queryParams.sort_diraction = 'asc';
+              }
+            } else {
+              queryParams.sort_field = name;
+              queryParams.sort_diraction = 'asc';
+            }
+            router.get(route('project.index'), queryParams);
+          }
+
   return (
     <AuthenticatedLayout
       header={
@@ -43,19 +66,25 @@ export default function Project({ projects , queryParams = null}) {
             <div className="p-6 text-gray-900 dark:text-gray-100">
               You're logged in!
 
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                  <tr className="text-nowrap">
-                    <th className="py-2 px-3">ID</th>
+            <div className="overflow-auto">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                <tr className="text-nowrap">
+                    <th className="py-2 px-3" onClick={(e)=> sortChanged('id')}>ID</th>
                     <th className="py-2 px-3">Image</th>
-                    <th className="py-2 px-3">Name</th>
-                    <th className="py-2 px-3">Status</th>
-                    <th className="py-2 px-3">create Date</th>
-                    <th className="py-2 px-3">Du Date</th>
+                    <th className="py-2 px-3" onClick={(e)=> sortChanged('name')}>Name</th>
+                    <th className="py-2 px-3" onClick={(e)=> sortChanged('status')}>Status</th>
+                    <th className="py-2 px-3" onClick={(e)=> sortChanged('created_at')}>create Date</th>
+                    <th className="py-2 px-3" onClick={(e)=> sortChanged('due_date')}>Du Date</th>
                     <th className="py-2 px-3">Created By</th>
                     <th className="py-2 px-3 text-right">Actions</th>
                   </tr>
-                  <tr className="text-nowrap">
+              
+                </thead>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                <th className="p-3"></th>
+                <th className="p-3"></th>
+                <tr className="text-nowrap">
                     <th className="py-2 px-3">
                       <TextInput className="w-full" placeholder="Project Name"
                       defaultValue={queryParams.name || ''}
@@ -76,14 +105,19 @@ export default function Project({ projects , queryParams = null}) {
                         ))}
                       </SelectInput>
                     </th>
+                    <th className="p-3"></th>
+                    <th className="p-3"></th>
+                    <th className="p-3"></th>
+                    <th className="p-3"></th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {/* <pre>{JSON.stringify(projects, null, 2)}</pre> */}
                   {projects.data.map((project) => (
                     <tr key={project.id}  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                    <td className="px-3 py-2">{project.id}</td>
-                   <td className="px-3 py-2"><img src={project.image_path} style={{ width: 60 }} /></td>
+                   <td className="px-3 py-2"><img src={project.imagPath} style={{ width: 60 }} /></td>
                    <td className="px-3 py-2">{project.name}</td>
                    <td className="px-3 py-2">
                     <span className={"text-white px-2 py-1 rounded "  + PROJECT_STATUS_CLASS_MAP[project.status] }>
@@ -107,6 +141,7 @@ export default function Project({ projects , queryParams = null}) {
                 </tbody>
               </table>
 
+            </div>
             <Pagination links={projects.meta.links} />  
 
             </div>
