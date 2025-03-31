@@ -4,6 +4,8 @@ import Pagination from "@/Components/Pagination";
 import TextInput from "@/Components/TextInput";
 import {PROJECT_STATUS_TEXT_MAP ,PROJECT_STATUS_CLASS_MAP } from "@/constants";
 import SelectInput from "@/Components/SelectInput";
+import { ChevronUpIcon ,ChevronDownIcon } from "@heroicons/react/20/solid";
+import TableHeading from "@/Components/TableHeading";
 export default function Project({ projects , queryParams = null}) {
         const user = usePage().props.auth.user;
         // const isAdmin = user.role === 'admin';
@@ -70,29 +72,71 @@ export default function Project({ projects , queryParams = null}) {
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                 <tr className="text-nowrap">
-                    <th className="py-2 px-3" onClick={(e)=> sortChanged('id')}>ID</th>
+                <TableHeading
+                        name="id"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        ID
+                      </TableHeading>
+                    {/* <th className="py-2 px-3 flex justify-between gap-1 items-center" D
+                      <div>
+                        <ChevronUpIcon className="w-4 h-4 text-gray-500" />
+                        <ChevronDownIcon className="w-4 h-4 text-gray-500" />
+                      </div>
+                    </th> */}
                     <th className="py-2 px-3">Image</th>
-                    <th className="py-2 px-3" onClick={(e)=> sortChanged('name')}>Name</th>
-                    <th className="py-2 px-3" onClick={(e)=> sortChanged('status')}>Status</th>
-                    <th className="py-2 px-3" onClick={(e)=> sortChanged('created_at')}>create Date</th>
-                    <th className="py-2 px-3" onClick={(e)=> sortChanged('due_date')}>Du Date</th>
-                    <th className="py-2 px-3">Created By</th>
+                    <TableHeading
+                        name="name"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        Name
+                      </TableHeading>                    
+                      <TableHeading
+                        name="status"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        Status
+                      </TableHeading>          
+                      
+                      <TableHeading
+                        name="created_at"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        Create Date
+                      </TableHeading>
+
+                      <TableHeading
+                        name="due_date"
+                        sort_field={queryParams.sort_field}
+                        sort_direction={queryParams.sort_direction}
+                        sortChanged={sortChanged}
+                      >
+                        Due Date
+                      </TableHeading>                    <th className="py-2 px-3">Created By</th>
                     <th className="py-2 px-3 text-right">Actions</th>
                   </tr>
               
                 </thead>
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                <th className="p-3"></th>
-                <th className="p-3"></th>
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">      
                 <tr className="text-nowrap">
-                    <th className="py-2 px-3">
+                   <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3"></th>
+                    <th className="p-3">
                       <TextInput className="w-full" placeholder="Project Name"
                       defaultValue={queryParams.name || ''}
                       onBlur={ (e) => searchFieldChanged('name' , e.target.value) }
                       onKeyPress={ (e) => onKeyPress('name' , e.target.value) }
                       />
                     </th>
-                    <th className="py-2 px-3">
+                    <th className="p-3">
                       <SelectInput
                       defaultValue={queryParams.status || ''}
                       onChange={ (e) => searchFieldChanged('status' , e.target.value) }
