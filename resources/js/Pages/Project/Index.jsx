@@ -1,11 +1,28 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head ,usePage } from "@inertiajs/react";
-import { Link } from "@inertiajs/react";
+import { Head ,usePage ,Link , router} from "@inertiajs/react";
 import Pagination from "@/Components/Pagination";
+import TextInput from "@/Components/TextInput";
 import {PROJECT_STATUS_TEXT_MAP ,PROJECT_STATUS_CLASS_MAP } from "@/constants";
-export default function Project({ projects ,auth }) {
+import SelectInput from "@/Components/SelectInput";
+export default function Project({ projects , queryParams = null}) {
         const user = usePage().props.auth.user;
-        const isAdmin = user.role === 'admin';
+        // const isAdmin = user.role === 'admin';
+        queryParams = queryParams || {};
+        const searchFieldChanged = (name, value) => {
+          if (value) {
+            queryParams[name] = value;
+          } else {
+            delete queryParams[name];
+          }
+          // router.push({ path: '/project', query: queryParams });
+          router.get(route('project.index'), queryParams);
+          }
+
+          const onKeyPress = (name, value) => {
+            if (e.key !== "Enter") return;
+            searchFieldChanged(name, value);
+          }
+
   return (
     <AuthenticatedLayout
       header={
@@ -38,6 +55,28 @@ export default function Project({ projects ,auth }) {
                     <th className="py-2 px-3">Created By</th>
                     <th className="py-2 px-3 text-right">Actions</th>
                   </tr>
+                  <tr className="text-nowrap">
+                    <th className="py-2 px-3">
+                      <TextInput className="w-full" placeholder="Project Name"
+                      defaultValue={queryParams.name || ''}
+                      onBlur={ (e) => searchFieldChanged('name' , e.target.value) }
+                      onKeyPress={ (e) => onKeyPress('name' , e.target.value) }
+                      />
+                    </th>
+                    <th className="py-2 px-3">
+                      <SelectInput
+                      defaultValue={queryParams.status || ''}
+                      onChange={ (e) => searchFieldChanged('status' , e.target.value) }
+                      className="w-full">
+                        <option value="">Select Status</option>
+                        {Object.keys(PROJECT_STATUS_TEXT_MAP).map((key) => (
+                          <option key={key} value={key}>
+                            {PROJECT_STATUS_TEXT_MAP[key]}
+                          </option>
+                        ))}
+                      </SelectInput>
+                    </th>
+                  </tr>
                 </thead>
                 <tbody>
                   {/* <pre>{JSON.stringify(projects, null, 2)}</pre> */}
@@ -46,7 +85,11 @@ export default function Project({ projects ,auth }) {
                    <td className="px-3 py-2">{project.id}</td>
                    <td className="px-3 py-2"><img src={project.image_path} style={{ width: 60 }} /></td>
                    <td className="px-3 py-2">{project.name}</td>
-                   <td className={"px-3 py-2 " + PROJECT_STATUS_CLASS_MAP[project.status]}> {PROJECT_STATUS_TEXT_MAP[project.status]}</td>
+                   <td className="px-3 py-2">
+                    <span className={"text-white px-2 py-1 rounded "  + PROJECT_STATUS_CLASS_MAP[project.status] }>
+                     {PROJECT_STATUS_TEXT_MAP[project.status]}
+                    </span>
+                     </td>
                    <td className="px-3 py-2 text-nowrap">{project.created_at}</td>
                    <td className="px-3 py-2 text-nowrap">{project.due_date}</td>
                    <td className="px-3 py-2">{project.createdBy.name}</td>
@@ -74,27 +117,3 @@ export default function Project({ projects ,auth }) {
   );
 }
 
-{/* <div className="mt-4 ">
-<ul className="space-y-4">
-  {projects.map((project) => (
-    <li
-      key={project.id}
-      className="border p-4 rounded-lg shadow-md bg-blue-200 hover:bg-blue-300 transition duration-200"
-    >
-      <h3 className="text-xl font-semibold">{project.title}</h3>
-      <p className="text-gray-600">{project.description}</p>
-      <span
-        className={`px-2 py-1 text-sm rounded-lg ${
-          project.status === "Completed"
-            ? "bg-green-200 text-green-700"
-            : project.status === "In Progress"
-            ? "bg-blue-200 text-blue-700"
-            : "bg-yellow-200 text-yellow-700"
-        }`}
-      >
-        {project.status}
-      </span>
-    </li>
-  ))}
-</ul>
-</div> */}
