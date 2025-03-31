@@ -2,6 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head ,usePage } from "@inertiajs/react";
 import { Link } from "@inertiajs/react";
 import Pagination from "@/Components/Pagination";
+import {PROJECT_STATUS_TEXT_MAP ,PROJECT_STATUS_CLASS_MAP } from "@/constants";
 export default function Project({ projects ,auth }) {
         const user = usePage().props.auth.user;
         const isAdmin = user.role === 'admin';
@@ -45,7 +46,7 @@ export default function Project({ projects ,auth }) {
                    <td className="px-3 py-2">{project.id}</td>
                    <td className="px-3 py-2"><img src={project.image_path} style={{ width: 60 }} /></td>
                    <td className="px-3 py-2">{project.name}</td>
-                   <td className="px-3 py-2">{project.status}</td>
+                   <td className={"px-3 py-2 " + PROJECT_STATUS_CLASS_MAP[project.status]}> {PROJECT_STATUS_TEXT_MAP[project.status]}</td>
                    <td className="px-3 py-2 text-nowrap">{project.created_at}</td>
                    <td className="px-3 py-2 text-nowrap">{project.due_date}</td>
                    <td className="px-3 py-2">{project.createdBy.name}</td>
